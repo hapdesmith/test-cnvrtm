@@ -48,7 +48,7 @@ export default function RegisterPage() {
                   className={cn("w-full px-4 py-3 border border-gray-300 bg-white/10 placeholder:text-gray text-black text-sm focus:outline-none focus:ring-0 leading-[22px]", errors.userId && "border-red-700")}
                 />
                 {errors.userId && (
-                  <p className="text-red-700 text-base lg:text-lg mt-1">
+                  <p className="text-red-700 text-xs lg:text-sm mt-1 italic">
                     Must be filled
                   </p>
                 )}
@@ -78,7 +78,7 @@ export default function RegisterPage() {
                   )}
                 </button>
                 {errors.password && (
-                <p className="text-red-700 text-base lg:text-lg mt-1">
+                <p className="text-red-700 text-xs lg:text-sm mt-1 italic">
                   Must be filled
                 </p>
               )}
@@ -107,7 +107,7 @@ export default function RegisterPage() {
                   )}
                 </button>
                 {errors.confirmPassword && (
-                <p className="text-red-700 text-base lg:text-lg mt-1">
+                <p className="text-red-700 text-xs lg:text-sm mt-1 italic">
                   Password does not match
                 </p>
               )}
