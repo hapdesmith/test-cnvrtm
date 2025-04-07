@@ -5,7 +5,7 @@ export default function ProfileInput({ label, error, isError, children }: { labe
       <div>
         {children}
         {isError && (
-          <p className="text-red-500 text-sm lg:text-base italic mt-1">
+          <p className="text-red-700 text-xs lg:text-sm italic mt-1">
             {error}
           </p>
         )}

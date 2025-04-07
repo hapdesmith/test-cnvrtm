@@ -25,7 +25,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className={cn("bg-[length:auto_100%] lg:bg-cover lg:bg-center bg-no-repeat",
-      isLoginPage ? "bg-[url(/bg-1.jpg)]" : "bg-[url(/bg.jpg)]")}>
+      isLoginPage ? "bg-[url(/bg-1.JPG)]" : "bg-[url(/bg.JPG)]")}>
         <div className="flex flex-col min-h-screen max-w-none lg:max-w-7xl w-full mx-auto">
           <Header />
           <div>
