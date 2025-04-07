@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useRef } from "react";
 import ProfileHeader from "./ProfileHedaer";
 import { useSearchParams } from "next/navigation";
 import { useProfile } from "@/contexts/profile/context";
@@ -21,7 +21,8 @@ export default function BasicDetails() {
   const { showSuccess } = useMessage();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
     defaultValues: {
       salutation: profileData?.salutation as SalutationType || "",
       firstName: profileData?.firstName || "",
@@ -39,6 +40,17 @@ export default function BasicDetails() {
 
   const isEdit = useMemo(() => searchParams.get('mode') === 'edit', [searchParams]);
 
+  useEffect(() => {
+    if (isEdit) {
+      reset({
+        salutation: profileData?.salutation as SalutationType || "",
+        firstName: profileData?.firstName || "",
+        lastName: profileData?.lastName || "",
+        email: profileData?.email || "",
+      });
+    }
+  }, [isEdit, reset, profileData]);
+
   const onSubmit = (data: ProfileData) => {
     updateProfileToLocalStorage("profileData", data);
     showSuccess("Profile updated successfully");
@@ -47,12 +59,15 @@ export default function BasicDetails() {
   const handleCancel = () => {
     router.push('/profile');
   }
+  const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Upload Image", e.target.files);
+  }
   return (
     <div className="flex flex-col min-h-screen">
       <ProfileHeader title="Profile" isEdit={isEdit} editLink="/profile?mode=edit" backEditLink="/profile" />
       {!isEdit && (
-        <div className="flex flex-row gap-x-3 lg:gap-x-5 items-start justify-start mt-10">
-          <PersonIcon className="text-[60px] lg:text-[200px] mt-2" />
+        <div className="flex flex-col lg:flex-row gap-x-3 lg:gap-x-5 items-start justify-start mt-10">
+          <PersonIcon className="!text-[60px] lg:!text-[200px] mt-2" />
           <div className="flex flex-col gap-y-3 lg:gap-y-5">
             <ProfileField label="Salutation*" value={profileData?.salutation} />
             <ProfileField label="First name*" value={profileData?.firstName} />
@@ -62,10 +77,11 @@ export default function BasicDetails() {
         </div>
       )}
       {isEdit && (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-row gap-x-3 lg:gap-x-5 items-start justify-start mt-10">
-          <div className="flex flex-col">
-            <PersonIcon className="text-[60px] lg:text-[200px]" />
-            <button className="text-base lg:text-lg font-medium underline">Upload Image</button>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col lg:flex-row gap-x-3 lg:gap-x-5 items-start justify-start mt-10">
+          <div className="flex flex-col items-center justify-center">
+            <PersonIcon className="!text-[80px] lg:!text-[200px]" />
+            <input type="file" onChange={(e) => handleUploadImage(e)} className="hidden" ref={fileInputRef} />
+            <div onClick={() => fileInputRef.current?.click()} className="text-base lg:text-lg font-medium underline cursor-pointer">Upload Image</div>
           </div>
           <div className="w-full lg:w-[400px] flex flex-col gap-y-3 lg:gap-y-5">
             <ProfileInput
@@ -116,6 +132,7 @@ export default function BasicDetails() {
                 type="submit"
                 className="w-full px-4 py-3 border-2 border-gray-700 bg-black backdrop-blur-sm text-white text-base lg:text-lg uppercase font-bold hover:bg-black/80 transition-all duration-300">Save & update</button>
               <button
+                type="button"
                 onClick={() => handleCancel()}
                 className="w-full px-4 py-3 border-2 border-gray-700 bg-black/10 backdrop-blur-sm text-black text-base lg:text-lg uppercase font-bold hover:bg-black/20 transition-all duration-300">Cancel</button>
             </div>

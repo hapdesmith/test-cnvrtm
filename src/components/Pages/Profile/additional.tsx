@@ -17,7 +17,7 @@ export default function AdditionalDetails() {
   const { showSuccess } = useMessage();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+  const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
     defaultValues: {
       homeAddress: additionalData?.homeAddress || "",
       country: additionalData?.country || "",
@@ -37,8 +37,24 @@ export default function AdditionalDetails() {
 
   const isEdit = useMemo(() => searchParams.get('mode') === 'edit', [searchParams]);
 
+  useEffect(() => {
+    if (isEdit) {
+      reset({
+        homeAddress: additionalData?.homeAddress || "",
+        country: additionalData?.country || "",
+        dateOfBirth: additionalData?.dateOfBirth || "",
+        gender: additionalData?.gender as GenderType || "",
+        martialStatus: additionalData?.martialStatus as MartialStatusType || "",
+      });
+    }
+  }, [isEdit, reset, additionalData]);
+
   const onSubmit = (data: AdditionalData) => {
     updateProfileToLocalStorage("additionalData", data);
+    if (typeof window !== "undefined") {
+      const event = new CustomEvent("updateMartialStatus", { detail: data.martialStatus });
+      window.dispatchEvent(event);
+    }
     showSuccess("Additional details updated successfully");
     router.push('/profile/additional-details');
   }
@@ -130,6 +146,7 @@ export default function AdditionalDetails() {
               type="submit"
               className="w-full px-4 py-3 border-2 border-gray-700 bg-black backdrop-blur-sm text-white text-base lg:text-lg uppercase font-bold hover:bg-black/80 transition-all duration-300">Save & update</button>
             <button
+              type="button"
               onClick={() => handleCancel()}
               className="w-full px-4 py-3 border-2 border-gray-700 bg-black/10 backdrop-blur-sm text-black text-base lg:text-lg uppercase font-bold hover:bg-black/20 transition-all duration-300">Cancel</button>
           </div>

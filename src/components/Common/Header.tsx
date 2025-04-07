@@ -29,9 +29,9 @@ export default function Header() {
 
   const renderMenuIcon = () => {
     if (isDrawerOpen) {
-      return <MenuOpenIcon className="!text-[60px] text-black" />;
+      return <MenuOpenIcon className="!text-4xl lg:!text-[60px] text-black" />;
     }
-    return <MenuIcon className="!text-[60px] text-black" />;
+    return <MenuIcon className="!text-4xl lg:!text-[60px] text-black" />;
   };
 
   const handleLogout = () => {
@@ -51,10 +51,10 @@ export default function Header() {
         {isDrawerOpen && isLoggedIn && (
           <div className="fixed lg:absolute z-10 top-[80px] left-0 lg:left-auto lg:right-0 lg:top-[100%] right-0 bg-white/50 backdrop-blur-sm shadow-lg">
             <ul className="list-none">
-              <li><Link className="block px-5 py-3 hover:bg-white/70 transition-all duration-300 text-black text-lg lg:text-xl whitespace-nowrap font-medium" href="/home">Home</Link></li>
-              <li><Link className="mt-2 block px-5 py-3 hover:bg-white/70 transition-all duration-300 text-black text-lg lg:text-xl whitespace-nowrap font-medium" href="/profile">My Profile</Link></li>
-              <li><Link className="mt-2 block px-5 py-3 hover:bg-white/70 transition-all duration-300 text-black text-lg lg:text-xl whitespace-nowrap font-medium" href="/profile?mode=edit">Edit Profile</Link></li>
-              <li><div className="mt-2 block px-5 py-3 hover:bg-white/70 transition-all duration-300 text-black text-lg lg:text-xl whitespace-nowrap font-medium cursor-pointer" onClick={handleLogout}>Logout</div></li>
+              <li><Link className="block px-5 py-3 hover:bg-white/70 transition-all duration-300 text-black text-lg lg:text-xl whitespace-nowrap font-bold lg:font-medium" href="/home">Home</Link></li>
+              <li><Link className="mt-2 block px-5 py-3 hover:bg-white/70 transition-all duration-300 text-black text-lg lg:text-xl whitespace-nowrap font-bold lg:font-medium" href="/profile">My Profile</Link></li>
+              <li><Link className="mt-2 block px-5 py-3 hover:bg-white/70 transition-all duration-300 text-black text-lg lg:text-xl whitespace-nowrap font-bold lg:font-medium" href="/profile?mode=edit">Edit Profile</Link></li>
+              <li><div className="mt-2 block px-5 py-3 hover:bg-white/70 transition-all duration-300 text-black text-lg lg:text-xl whitespace-nowrap font-bold lg:font-medium cursor-pointer" onClick={handleLogout}>Logout</div></li>
             </ul>
           </div>
         )}

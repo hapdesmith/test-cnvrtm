@@ -42,6 +42,12 @@ export interface PersonalPreference {
   movies: string[];
 };
 
+export interface PersonalPreferenceInput {
+  hobbies: string;
+  sports: string;
+  music: string;
+  movies: string;
+};
 export interface LocalStorageProfile {
   profileData: ProfileData;
   additionalData: AdditionalData;
