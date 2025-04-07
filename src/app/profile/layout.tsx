@@ -18,6 +18,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
     if (typeof window !== "undefined") {
       const handleMartialStatusChange = (event: Event) => {
         const customEvent = event as CustomEvent;
+        console.log(customEvent.detail);
         setLocalStorage("isMarried", customEvent.detail === "married");
         setIsMarried(customEvent.detail === "married");
       };

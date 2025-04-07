@@ -11,13 +11,18 @@ import ProfileInput from "./ProfileInput";
 import { AdditionalData, GenderType, MartialStatusType } from "@/types";
 import { GENDER, MARTIAL_STATUS } from "@/constant";
 import { cn } from "@/utils/common";
+import { format } from 'date-fns';
 
 export default function AdditionalDetails() {
   const { additionalData, updateProfileToLocalStorage } = useProfile();
   const { showSuccess } = useMessage();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
+
+  const seventeenYearsAgo = new Date();
+  seventeenYearsAgo.setFullYear(seventeenYearsAgo.getFullYear() - 17);
+
+  const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm<AdditionalData>({
     defaultValues: {
       homeAddress: additionalData?.homeAddress || "",
       country: additionalData?.country || "",
@@ -101,13 +106,24 @@ export default function AdditionalDetails() {
           </ProfileInput>
           <ProfileInput
             label="Date of birth*"
-            error="Please enter your date of birth"
+            error={errors.dateOfBirth ? (errors.dateOfBirth.type === 'validate' ? 'You have to be at least 17 years old' : 'Please enter your date of birth') : ''}
             isError={!!errors.dateOfBirth}
           >
             <input
               type="date"
               id="dateOfBirth"
-              {...register("dateOfBirth", { required: true })}
+              {...register("dateOfBirth", {
+                required: true,
+                validate: (value) => {
+                  const birthDate = new Date(value);
+                  const age = new Date().getFullYear() - birthDate.getFullYear();
+                  const monthDiff = new Date().getMonth() - birthDate.getMonth();
+                  const dayDiff = new Date().getDate() - birthDate.getDate();
+                  return age > 17 || (age === 17 && (monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0)));
+                }
+              })}
+              max={format(new Date(), 'yyyy-MM-dd')}
+              onFocus={(e) => e.target.value = format(seventeenYearsAgo, 'yyyy-MM-dd')}
               className={cn("w-full px-4 py-3 border-2 border-gray-700 bg-black/10 backdrop-blur-sm placeholder:text-gray text-black text-sm focus:outline-none focus:ring-0 leading-[22px]", errors.dateOfBirth && "border-red-500")}
             />
           </ProfileInput>
